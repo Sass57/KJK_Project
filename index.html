@@ -1,51 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-    <div id="scroll-top"></div>
-<div id="app">
+  <div id="scroll-top"></div>
+  <div id="app">
+    <div class="plaque">
+      <div class="plaque-title">A Tűzhegy Varázslója</div>
+      <div class="plaque-sub">Steve Jackson &amp; Ian Livingstone · 1982</div>
+    </div>
+    <div id="stats-bar" style="display:none">
+      <div class="stat skill">
+        <span class="stat-label">Ügyesség</span>
+        <div class="stat-bar-wrap">
+          <span class="stat-val" id="skill-val">—</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill skill-bar" id="skill-bar" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="stat stamina">
+        <span class="stat-label">Életerő</span>
+        <div class="stat-bar-wrap">
+          <span class="stat-val" id="stamina-val">—</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill stamina-bar" id="stamina-bar" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="stat luck">
+        <span class="stat-label">Szerencse</span>
+        <div class="stat-bar-wrap">
+          <span class="stat-val" id="luck-val">—</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill luck-bar" id="luck-bar" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Élelem</span>
+        <div id="food-icons"></div>
+        <div id="food-icons"></div>
+      </div>
+      <div class="stat para">
+        <span class="stat-label">Szakasz</span>
+        <span class="stat-val" id="para-num-stat">—</span>
+      </div>
+    </div>
 
-<div class="plaque">
-  <div class="plaque-title">A Tűzhegy Varázslója</div>
-  <div class="plaque-sub">Steve Jackson &amp; Ian Livingstone · 1982</div>
-</div>
+    <div id="main">
+      <div id="setup-screen" class="screen active">
+        <div class="start-hero">
+          <h1>A Tűzhegy<br>Varázslója</h1>
+        </div>
+        <div class="start-intro">
+          Ennek a könyvnek Te vagy a hőse. Egyedül vágsz neki a Tűzhegy birodalmának, hogy megszerezd a legendás
+          Varázsló kincsét — ha egyáltalán élve kijutsz a labirintusból.
+        </div>
 
-<div id="stats-bar" style="display:none">
-  <div class="stat skill">
-    <span class="stat-label">Ügyesség</span>
-    <div class="stat-bar-wrap">
-      <span class="stat-val" id="skill-val">—</span>
-      <div class="stat-bar-bg"><div class="stat-bar-fill skill-bar" id="skill-bar" style="width:0%"></div></div>
-    </div>
-  </div>
-  <div class="stat stamina">
-    <span class="stat-label">Életerő</span>
-    <div class="stat-bar-wrap">
-      <span class="stat-val" id="stamina-val">—</span>
-      <div class="stat-bar-bg"><div class="stat-bar-fill stamina-bar" id="stamina-bar" style="width:0%"></div></div>
-    </div>
-  </div>
-  <div class="stat luck">
-    <span class="stat-label">Szerencse</span>
-    <div class="stat-bar-wrap">
-      <span class="stat-val" id="luck-val">—</span>
-      <div class="stat-bar-bg"><div class="stat-bar-fill luck-bar" id="luck-bar" style="width:0%"></div></div>
-    </div>
-  </div>
-  <div class="stat">
-    <span class="stat-label">Élelem</span>
-    <div id="food-icons"></div>
-    <div id="food-icons"></div>
-  </div>
-  <div class="stat para">
-    <span class="stat-label">Szakasz</span>
-    <span class="stat-val" id="para-num-stat">—</span>
-  </div>
-</div>
-  </div>
+        <div class="section-lbl">Tulajdonságok dobása</div>
+        <div class="roll-cards">
+          <div class="roll-card" id="rc-skill">
+            <span class="roll-stat-name">⚔ Ügyesség</span>
+            <span class="roll-total" id="setup-skill">—</span>
+            <span class="roll-total-lbl">1 kocka + 6</span>
+          </div>
+          <div class="roll-card" id="rc-stam">
+            <span class="roll-stat-name">❤ Életerő</span>
+            <span class="roll-total" id="setup-stamina">—</span>
+            <span class="roll-total-lbl">2 kocka + 12</span>
+          </div>
+          <div class="roll-card" id="rc-luck">
+            <span class="roll-stat-name">⭐ Szerencse</span>
+            <span class="roll-total" id="setup-luck">—</span>
+            <span class="roll-total-lbl">1 kocka + 6</span>
+          </div>
+        </div>
+        <div class="start-actions" style="margin-bottom:25px">
+          <button class="action-btn primary" onclick="rollStats()">🎲 Kockavetés</button>
+          <button id="start-btn" onclick="startGame()">⚔ Kazamata Ajtaja</button>
+        </div>
+
+        <div class="section-lbl">Válassz varázsitalt az útra</div>
+        <div class="potion-choice">
+          <button class="potion-btn" onclick="selectPotion('skill')" id="p-skill">
+            <span class="potion-icon">⚔️</span>
+            <div>
+              <span class="potion-name">Ügyesség Itala</span>
+              <span class="potion-desc">Visszaállítja Ügyességed kezdeti értékre</span>
+            </div>
+          </button>
+          <button class="potion-btn" onclick="selectPotion('stamina')" id="p-stamina">
+            <span class="potion-icon">❤️</span>
+            <div>
+              <span class="potion-name">Erő Itala</span>
+              <span class="potion-desc">Visszaállítja Életerőd kezdeti értékre</span>
+            </div>
+          </button>
+          <button class="potion-btn" onclick="selectPotion('luck')" id="p-luck">
+            <span class="potion-icon">⭐</span>
+            <div>
+              <span class="potion-name">Szerencse Itala</span>
+              <span class="potion-desc">Visszaállítja Szerencséd és +1 kezdeti pont</span>
+            </div>
+          </button>
+        </div>
+      </div>
 </body>
 </html>
