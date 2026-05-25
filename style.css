@@ -167,3 +167,83 @@
       font-size: 18px;
       padding-top: 4px
     }
+
+     .food-icons {
+      display: none
+    }
+
+    #stats-bar .stat:nth-child(4) .stat-val {
+      color: #a07840;
+      font-size: 24px
+    }
+
+    .screen {
+      display: none
+    }
+
+    .screen.active {
+      display: block;
+      animation: fadeIn .6s ease-out
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    #setup-screen {
+      padding: 0 0 20px;
+    }
+
+    .start-hero {
+      text-align: center;
+      padding: 40px 20px 20px
+    }
+
+    .start-hero h1 {
+      font-family: 'Uncial Antiqua', cursive;
+      font-size: clamp(32px, 7vw, 64px);
+      color: #d4af37;
+      text-shadow: 0 0 40px rgba(139, 0, 0, .6), 0 4px 8px rgba(0, 0, 0, .9);
+      line-height: 1.1;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .start-intro {
+      font-family: 'Crimson Text', serif;
+      font-style: italic;
+      font-size: 18px;
+      color: #bdaea0;
+      line-height: 1.8;
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 25px 30px;
+      border-top: 1px solid #3d2f24;
+      border-bottom: 1px solid #3d2f24;
+      background: linear-gradient(90deg, transparent, rgba(30, 20, 15, .5), transparent);
+    }
+
+    .section-lbl {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #8a735c;
+      margin: 25px 0 15px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .roll-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
