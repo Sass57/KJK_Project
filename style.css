@@ -293,7 +293,6 @@
       font-style: italic
     }
 
-    /* use existing IDs: setup-skill, setup-stamina, setup-luck */
 
     .start-actions {
       display: flex;
@@ -303,7 +302,6 @@
       padding: 15px 0
     }
 
-    /* potion choice */
     .potion-choice {
       display: flex;
       gap: 12px;
@@ -387,10 +385,8 @@
       transform: translateY(-2px)
     }
 
-    /* ── GAME SCREEN ── */
     #game-screen {}
 
-    /* ── PARA CARD / SCROLL ── */
     #para-card {
       position: relative;
       margin: 0 0 20px;
@@ -424,4 +420,115 @@
       color: #b83b3b;
       line-height: 1;
       text-shadow: 0 2px 4px rgba(0, 0, 0, .8);
+    }
+
+       .sec-ornament {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      gap: 12px
+    }
+
+    .sec-line {
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, #523c2d, transparent)
+    }
+
+    .sec-deco {
+      color: #8c6d4d;
+      font-size: 22px
+    }
+
+    #para-decorline {
+      display: none
+    }
+
+    #para-text {
+      padding: 25px 35px 35px;
+      font-size: 18px;
+      line-height: 1.8;
+      color: #c7b69d;
+      min-height: 120px;
+    }
+
+    #para-text.fade-in {
+      animation: appear .5s ease-out
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    #para-text::first-letter {
+      font-size: 2.8rem;
+      font-family: 'Uncial Antiqua', cursive;
+      font-weight: 700;
+      color: #d4af37;
+      float: left;
+      line-height: .85;
+      margin-right: 6px;
+      margin-top: 4px;
+      text-shadow: 0 0 20px rgba(200, 148, 58, .4);
+    }
+
+    #eat-section {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 12px;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      color: #8a735c;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    #eat-note {
+      font-style: italic;
+      font-size: 11px;
+      color: #5a4a3c;
+      letter-spacing: 0
+    }
+
+    .iron-panel {
+      background: linear-gradient(160deg, #15110d 0%, #0a0806 100%);
+      border: 2px solid #2b211a;
+      border-top: 3px solid #3d2f24;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .5);
+    }
+
+    .iron-title {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: #9e846b;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .rivet {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #5a4a3c, #110e0c);
+      border: 1px solid #000;
+      margin-right: 10px;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, .8);
     }
