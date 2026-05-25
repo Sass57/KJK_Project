@@ -134,3 +134,36 @@
       border-radius: 1px;
       transition: width .5s ease-in-out
     }
+
+    .skill-bar {
+      background: linear-gradient(90deg, #1e4a7a, #3a8ad4);
+      box-shadow: 0 0 5px #3a8ad4
+    }
+
+    .stamina-bar {
+      background: linear-gradient(90deg, #5c1010, #b33939);
+      box-shadow: 0 0 5px #b33939
+    }
+
+    .luck-bar {
+      background: linear-gradient(90deg, #7a6010, #d4af37);
+      box-shadow: 0 0 5px #d4af37
+    }
+
+    .skill .stat-val {
+      color: #8aaad4
+    }
+
+    .stamina .stat-val {
+      color: #b33939
+    }
+
+    .luck .stat-val {
+      color: #d4af37
+    }
+
+    .stat.para .stat-val {
+      color: #8a735c;
+      font-size: 18px;
+      padding-top: 4px
+    }
