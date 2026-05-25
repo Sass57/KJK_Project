@@ -247,3 +247,118 @@
       gap: 15px;
       margin-bottom: 20px;
     }
+
+    
+    .roll-card {
+      background: linear-gradient(160deg, #1c1510, #0a0806);
+      border: 2px solid #2b211a;
+      border-radius: 8px;
+      padding: 25px 15px 20px;
+      text-align: center;
+      transition: all .3s ease;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, .5);
+    }
+
+    .roll-card.rolled {
+      border-color: #5c4430;
+      box-shadow: 0 0 20px rgba(212, 175, 55, .1)
+    }
+
+    .roll-stat-name {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #9e846b;
+      display: block;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .roll-total {
+      font-family: 'Cinzel', serif;
+      font-size: 36px;
+      font-weight: 600;
+      color: #e8c060;
+      display: block;
+      line-height: 1;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, .8);
+    }
+
+    .roll-total-lbl {
+      font-size: 12px;
+      color: #6b5a4a;
+      display: block;
+      margin-top: 6px;
+      font-style: italic
+    }
+
+    /* use existing IDs: setup-skill, setup-stamina, setup-luck */
+
+    .start-actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      padding: 15px 0
+    }
+
+    /* potion choice */
+    .potion-choice {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .potion-btn {
+      flex: 1;
+      min-width: 160px;
+      background: linear-gradient(160deg, #1c1510, #0a0806);
+      border: 2px solid #2b211a;
+      border-radius: 8px;
+      padding: 15px 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      transition: all .2s ease;
+      font-family: 'Crimson Text', serif;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, .4);
+      color: #d4c3a3;
+    }
+
+    .potion-btn:hover {
+      border-color: #5c4430;
+      background: linear-gradient(160deg, #241a14, #0f0b08);
+      transform: translateY(-2px)
+    }
+
+    .potion-btn.selected {
+      border-color: #8b0000;
+      background: linear-gradient(160deg, #2b1515, #0f0505);
+      box-shadow: 0 0 15px rgba(139, 0, 0, .3)
+    }
+
+    .potion-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .8))
+    }
+
+    .potion-name {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      color: #d4af37;
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 600;
+      letter-spacing: 1px
+    }
+
+    .potion-desc {
+      font-size: 12px;
+      color: #8a735c;
+      line-height: 1.4;
+      display: block
+    }
