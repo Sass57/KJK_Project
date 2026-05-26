@@ -114,5 +114,106 @@
           </button>
         </div>
       </div>
+      <div id="game-screen" class="screen">
+
+        <!-- Para card / scroll -->
+        <div id="para-card">
+          <div class="scroll-inner">
+            <div id="para-header">
+              <span id="para-num-display">1</span>
+              <div class="sec-ornament">
+                <div class="sec-line"></div>
+                <span class="sec-deco">✦</span>
+                <div class="sec-line" style="flex:.3"></div>
+              </div>
+            </div>
+            <div id="para-text"></div>
+          </div>
+        </div>
+
+        <!-- Eat / potion row -->
+        <div id="eat-section">
+          <button id="eat-btn" onclick="eatFood()">🍖 Táplálkozás</button>
+          <button id="drink-potion-btn" onclick="drinkPotion()">🧪 Elixír (2 adag)</button>
+          <span id="eat-note"></span>
+        </div>
+
+        <!-- Combat panel -->
+        <div id="combat-section" class="iron-panel">
+          <div class="iron-title"><span class="rivet"></span>Harc a Sötétben</div>
+          <div class="combat-combatants">
+            <div class="combatant player-side">
+              <div class="combatant-name">Te</div>
+              <div class="combatant-hp" id="p-hp">—</div>
+              <div class="combatant-skill" id="p-sk">Ü: —</div>
+            </div>
+            <div class="vs-divider">VS</div>
+            <div class="combatant enemy-side">
+              <div class="combatant-name" id="enemy-name">Ellenség</div>
+              <div class="combatant-hp" id="e-hp">—</div>
+              <div class="combatant-skill" id="e-sk">Ü: —</div>
+            </div>
+          </div>
+          <div id="combat-log">A harc elkezdődik…</div>
+          <div class="combat-buttons">
+            <button id="fight-btn" onclick="fightRound()">⚔ Csapás</button>
+            <button id="flee-btn" onclick="fleeCombat()">🏃 Menekülés</button>
+            <button id="luck-fight-btn" onclick="luckInCombat()" style="display:none">⭐ Szerencse</button>
+          </div>
+        </div>
+
+        <div id="luck-section" class="iron-panel">
+          <div class="iron-title"><span class="rivet"></span>Tedd próbára Szerencséd</div>
+          <div class="luck-desc">A sors kénye-kedve dönt… (2d6 ≤ Szerencse = kedvező)</div>
+          <button class="action-btn luck-btn" onclick="testLuck()">🎲 Kockavetés</button>
+        </div>
+
+        <div class="iron-panel">
+          <div class="iron-title"><span class="rivet"></span>Válaszút</div>
+          <div id="choices"></div>
+          <div
+            style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:15px;border-top:1px solid #2b211a;">
+            <div class="goto-row" style="margin:0">
+              <span
+                style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#8a735c;">Ugrás:</span>
+              <input type="number" id="jump-input" min="1" max="400" placeholder="1–400"
+                onkeydown="if(event.key==='Enter')manualJump()">
+              <button class="action-btn" onclick="manualJump()" style="padding:10px 14px">→</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="game-over">
+        <div class="plaque">
+          <div class="plaque-title">A Tűzhegy Varázslója</div>
+        </div>
+        <div class="end-wrap">
+          <h2>☠ Elbuktál</h2>
+          <div class="end-text" id="game-over-msg">Életerőd elfogyott.</div>
+          <div class="divider-line">· ⚔ ·</div>
+          <button class="action-btn primary" onclick="restartGame()">↩ Feltámadás</button>
+        </div>
+      </div>
+
+      <div id="game-win">
+        <div class="plaque">
+          <div class="plaque-title">A Tűzhegy Varázslója</div>
+        </div>
+        <div class="end-wrap">
+          <h2>✦ Győzelem ✦</h2>
+          <div class="end-text" id="game-win-msg">Legyőzted a Varázslót!</div>
+          <div class="divider-line">✦ · ✦ · ✦</div>
+          <button class="action-btn" onclick="restartGame()">↩ Új Kaland</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
