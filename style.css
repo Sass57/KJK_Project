@@ -386,8 +386,6 @@
      transform: translateY(-2px)
  }
 
- #game-screen {}
-
  #para-card {
      position: relative;
      margin: 0 0 20px;
@@ -852,3 +850,79 @@
      font-size: 24px;
      letter-spacing: 10px
  }
+
+  #toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #15110d;
+      border: 1px solid #4a3a2a;
+      border-radius: 4px;
+      padding: .7rem 1.5rem;
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: #d4c3a3;
+      transition: transform .3s ease;
+      z-index: 100;
+      white-space: nowrap;
+      max-width: 90vw;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .6);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .8);
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0)
+    }
+
+    #toast.bad {
+      border-color: #6a2020;
+      color: #e88b8b
+    }
+
+    #toast.good {
+      border-color: #294d29;
+      color: #8ab88a
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0806;
+      border-left: 1px solid #1a1410
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2b211a;
+      border-radius: 4px
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3d2f24
+    }
+
+    @media(max-width:600px) {
+      #stats-bar {
+        grid-template-columns: repeat(3, 1fr)
+      }
+
+      #para-text {
+        padding: 20px;
+        font-size: 16px
+      }
+
+      #para-header {
+        padding: 15px 20px 10px
+      }
+
+      .roll-cards {
+        grid-template-columns: 1fr
+      }
+
+      .plaque-title {
+        font-size: clamp(22px, 5vw, 38px)
+      }
+    }
