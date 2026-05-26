@@ -627,3 +627,61 @@
       gap: 10px;
       flex-wrap: wrap
     }
+
+        #luck-section {
+      display: none
+    }
+
+    #luck-section.active {
+      display: block
+    }
+
+    .luck-desc {
+      font-size: 14px;
+      color: #9e846b;
+      font-style: italic;
+      margin-bottom: 12px
+    }
+
+    #choices {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 15px
+    }
+
+    .choice-btn {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: linear-gradient(90deg, rgba(25, 20, 16, .8), rgba(15, 10, 8, .5));
+      border: 1px solid #2e231b;
+      border-left: 4px solid #5a4a3c;
+      border-radius: 6px;
+      padding: 16px 20px;
+      cursor: pointer;
+      font-family: 'Crimson Text', serif;
+      font-size: 17px;
+      color: #bdaea0;
+      transition: all .2s ease;
+      text-align: left;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, .3);
+      width: 100%;
+    }
+
+    .choice-btn:hover {
+      background: linear-gradient(90deg, rgba(45, 30, 20, .9), rgba(20, 15, 10, .7));
+      border-left-color: #b83b3b;
+      border-color: #4a3626;
+      color: #e3ccaa;
+      transform: translateX(5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, .5);
+    }
+
+    .choice-arrow {
+      color: #b83b3b;
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-left: auto;
+      font-weight: bold
+    }
