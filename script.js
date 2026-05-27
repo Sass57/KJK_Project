@@ -104,4 +104,40 @@ function gotoParaParagraph(n) {
     const pb = document.getElementById('drink-potion-btn');
     if (player.potionCharges <= 0) { pb.textContent = '🧪 Ital (kiürült)'; pb.disabled = true; }
     else { pb.textContent = `🧪 Ital (${player.potionCharges} adag)`; pb.disabled = false; }
-}
+      if (data.b) {
+        startCombat(data.b, data.c);
+        return;
+      }
+
+      if (data.l && data.c && data.c.length >= 2) {
+        luckPending = data.c;
+        document.getElementById('luck-section').classList.add('active');
+        document.getElementById('choices').innerHTML = '';
+        return;
+      }
+
+      renderChoices(data.c || []);
+    }
+
+    function renderChoices(choices) {
+      const el = document.getElementById('choices');
+      el.innerHTML = '';
+
+      if (!choices.length) {
+        const text = GAME.DATA[String(currentPara)]?.t || '';
+        const lower = text.toLowerCase();
+        const isDeath = lower.includes('meghaltál') || lower.includes('kalandod véget ért') ||
+          lower.includes('elpusztul') || lower.includes('nem éled túl') ||
+          lower.includes('élete véget ért') || lower.includes('végzetes');
+        if (isDeath) { setTimeout(gameOver, 1400); return; }
+        return;
+      }
+
+      choices.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.innerHTML = `<span>» ${c.text}</span><span class="choice-arrow">↩ ${c.target}</span>`;
+        btn.onclick = () => gotoParaParagraph(c.target);
+        el.appendChild(btn);
+      });
+    }
