@@ -22,3 +22,47 @@ const GAME = {};
       ['rc-skill', 'rc-stam', 'rc-luck'].forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('rolled'); });
       if (selectedPotion) document.getElementById('start-btn').style.display = 'flex';
     }
+        function selectPotion(type) {
+      selectedPotion = type;
+      document.querySelectorAll('.potion-btn').forEach(b => b.classList.remove('selected'));
+      document.getElementById('p-' + type).classList.add('selected');
+      if (GAME._pendingStats) document.getElementById('start-btn').style.display = 'flex';
+    }
+
+    function startGame() {
+      if (!GAME._pendingStats || !selectedPotion) return;
+      const s = GAME._pendingStats;
+      player = {
+        skill: s.skill, maxSkill: s.skill,
+        stamina: s.stamina, maxStamina: s.stamina,
+        luck: s.luck, maxLuck: s.luck,
+        food: 10,
+        potion: selectedPotion, potionCharges: 2,
+        inventory: []
+      };
+      document.getElementById('setup-screen').classList.remove('active');
+      document.getElementById('game-screen').classList.add('active');
+      document.getElementById('stats-bar').style.display = 'grid';
+      updateStats();
+      gotoParaParagraph(1);
+    }
+
+    function updateStats() {
+      document.getElementById('skill-val').textContent = player.skill;
+      document.getElementById('stamina-val').textContent = player.stamina;
+      document.getElementById('luck-val').textContent = player.luck;
+      const sb = document.getElementById('skill-bar');
+      const stb = document.getElementById('stamina-bar');
+      const lb = document.getElementById('luck-bar');
+      sb.style.width = Math.max(0, (player.skill / player.maxSkill) * 100) + '%';
+      stb.style.width = Math.max(0, (player.stamina / player.maxStamina) * 100) + '%';
+      lb.style.width = Math.max(0, (player.luck / player.maxLuck) * 100) + '%';
+      document.getElementById('para-num-stat').textContent = currentPara;
+
+      const fi = document.getElementById('food-icons');
+      if (fi) {
+        fi.innerHTML = '<span style="font-family:Cinzel,serif;font-size:20px;font-weight:600;color:#a07840;text-shadow:0 2px 4px rgba(0,0,0,.8);display:block;line-height:1">' + player.food + '</span><span style="font-size:11px;color:#5a4a3c">/10</span>';
+      }
+
+      if (player.stamina <= 0) { gameOver(`Hősiesen küzdöttél, de életerőd elfogyott a ${currentPara}. szakasznál.`); }
+    }
