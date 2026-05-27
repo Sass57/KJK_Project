@@ -141,3 +141,36 @@ function gotoParaParagraph(n) {
         el.appendChild(btn);
       });
     }
+        function manualJump() {
+      const val = parseInt(document.getElementById('jump-input')?.value);
+      if (val >= 1 && val <= 400) gotoParaParagraph(val);
+      else showToast('1–400 közötti számot adj meg!', 'bad');
+    }
+
+    function startCombat(enemy, afterChoices) {
+      inCombat = true;
+      combatState = {
+        enemySkill: enemy.skill,
+        enemyStamina: enemy.stamina,
+        enemyName: enemy.name || 'Szörny',
+        afterChoices: afterChoices || [],
+        luckAvailable: false,
+        lastResult: null
+      };
+
+      document.getElementById('combat-section').classList.add('active');
+      document.getElementById('enemy-name').textContent = combatState.enemyName;
+      document.getElementById('fight-btn').disabled = false;
+      document.getElementById('flee-btn').disabled = false;
+      updateCombatDisplay();
+      document.getElementById('combat-log').textContent = `${enemy.name} (Ü:${enemy.skill} É:${enemy.stamina}) rád támad!`;
+      document.getElementById('luck-fight-btn').style.display = 'none';
+      document.getElementById('choices').innerHTML = '';
+    }
+
+    function updateCombatDisplay() {
+      document.getElementById('p-hp').textContent = player.stamina;
+      document.getElementById('p-sk').textContent = `Ü: ${player.skill}`;
+      document.getElementById('e-hp').textContent = combatState.enemyStamina;
+      document.getElementById('e-sk').textContent = `Ü: ${combatState.enemySkill}`;
+    }
