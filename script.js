@@ -249,3 +249,63 @@ function gotoParaParagraph(n) {
       if (combatState.enemyStamina <= 0) endCombat(true);
       else if (player.stamina <= 0) gameOver(`${combatState.enemyName} legyőzött a ${currentPara}. szakasznál.`);
     }
+       function fleeCombat() {
+      player.stamina -= 2;
+      updateStats();
+      showToast('Menekülés közben megsebesültél! (-2 ÉP)', 'bad');
+      endCombat(false);
+    }
+
+    function endCombat(won) {
+      inCombat = false;
+      document.getElementById('combat-section').classList.remove('active');
+      document.getElementById('fight-btn').disabled = true;
+      document.getElementById('flee-btn').disabled = true;
+
+      if (won) {
+        showToast(`Legyőzted: ${combatState.enemyName}! ⚔`, 'good');
+        document.getElementById('combat-log').textContent = `${combatState.enemyName} elesett.`;
+        renderChoices(combatState.afterChoices || []);
+      } else {
+        renderChoices(combatState.afterChoices || []);
+      }
+    }
+
+    function testLuck() {
+      const roll = roll2d6();
+      const lucky = roll <= player.luck;
+      player.luck = Math.max(0, player.luck - 1);
+      updateStats();
+
+      document.getElementById('luck-section').classList.remove('active');
+
+      if (luckPending) {
+        const choices = luckPending;
+        luckPending = null;
+        const luckyChoice = choices.find(c => c.text.toLowerCase().includes('szerencsés') && !c.text.toLowerCase().includes('bal'));
+        const badChoice = choices.find(c => c.text.toLowerCase().includes('balszerencsés') || c.text.toLowerCase().includes('nincs szerencséd'));
+
+        if (lucky && luckyChoice) {
+          showToast(`✦ Szerencsés vagy! (${roll} ≤ ${player.luck + 1})`, 'good');
+          setTimeout(() => gotoParaParagraph(luckyChoice.target), 800);
+        } else if (!lucky && badChoice) {
+          showToast(`✦ Balszerencse! (${roll} > ${player.luck + 1})`, 'bad');
+          setTimeout(() => gotoParaParagraph(badChoice.target), 800);
+        } else {
+          showToast(lucky ? `✦ Szerencsés! (${roll})` : `✦ Balszerencse! (${roll})`, lucky ? 'good' : 'bad');
+          const target = lucky ? choices[0].target : (choices[1] || choices[0]).target;
+          setTimeout(() => gotoParaParagraph(target), 800);
+        }
+      }
+    }
+
+    function eatFood() {
+      if (player.food <= 0) { showToast('Nincs élelem!', 'bad'); return; }
+      if (player.stamina >= player.maxStamina) { showToast('Teljes az életerőd!'); return; }
+      player.food--;
+      player.stamina = Math.min(player.maxStamina, player.stamina + 4);
+      updateStats();
+      showToast(`Evett. +4 ÉP → ${player.stamina}`, 'good');
+      document.getElementById('eat-note').textContent = `Élelem: ${player.food}/10`;
+      document.getElementById('eat-btn').disabled = player.food <= 0;
+    }
