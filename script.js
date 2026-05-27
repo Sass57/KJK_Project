@@ -174,3 +174,78 @@ function gotoParaParagraph(n) {
       document.getElementById('e-hp').textContent = combatState.enemyStamina;
       document.getElementById('e-sk').textContent = `Ü: ${combatState.enemySkill}`;
     }
+
+        function fightRound() {
+      if (!inCombat) return;
+      const playerRoll = roll2d6();
+      const enemyRoll = roll2d6();
+      const playerAttack = playerRoll + player.skill;
+      const enemyAttack = enemyRoll + combatState.enemySkill;
+
+      let log = `Te: ${playerRoll}+${player.skill}=${playerAttack} | ${combatState.enemyName}: ${enemyRoll}+${combatState.enemySkill}=${enemyAttack}. `;
+      combatState.luckAvailable = false;
+
+      if (playerAttack > enemyAttack) {
+        combatState.enemyStamina -= 2;
+        log += `✓ Sebzetted! (${combatState.enemyStamina} ÉP maradt)`;
+        combatState.lastResult = 'hit';
+        combatState.luckAvailable = true;
+        document.getElementById('luck-fight-btn').style.display = 'inline-flex';
+      } else if (enemyAttack > playerAttack) {
+        player.stamina -= 2;
+        log += `✗ Megsebesültél! (${player.stamina} ÉP maradt)`;
+        combatState.lastResult = 'hit_player';
+        combatState.luckAvailable = true;
+        document.getElementById('luck-fight-btn').style.display = 'inline-flex';
+        updateStats();
+      } else {
+        log += `⬡ Holtpont! Következő forduló.`;
+        document.getElementById('luck-fight-btn').style.display = 'none';
+      }
+
+      document.getElementById('combat-log').textContent = log;
+      updateCombatDisplay();
+
+      if (combatState.enemyStamina <= 0) {
+        endCombat(true);
+      } else if (player.stamina <= 0) {
+        gameOver(`${combatState.enemyName} legyőzött a ${currentPara}. szakasznál. Kalandod véget ért.`);
+      }
+    }
+
+    function luckInCombat() {
+      if (!combatState.luckAvailable) return;
+      combatState.luckAvailable = false;
+      document.getElementById('luck-fight-btn').style.display = 'none';
+
+      const roll = roll2d6();
+      const lucky = roll <= player.luck;
+      player.luck = Math.max(0, player.luck - 1);
+
+      let msg = '';
+      if (combatState.lastResult === 'hit') {
+        if (lucky) {
+          combatState.enemyStamina -= 2;
+          msg = `✦ Szerencsés! Plusz 2 seb. (${combatState.enemyStamina} ÉP)`;
+        } else {
+          combatState.enemyStamina += 1;
+          msg = `✦ Balszerencsés! 1 seb visszaáll. (${combatState.enemyStamina} ÉP)`;
+        }
+      } else {
+        if (lucky) {
+          player.stamina += 1;
+          msg = `✦ Szerencsés! 1 seb csökken. (${player.stamina} ÉP)`;
+        } else {
+          player.stamina -= 1;
+          msg = `✦ Balszerencsés! +1 seb. (${player.stamina} ÉP)`;
+        }
+      }
+
+      showToast(msg, lucky ? 'good' : 'bad');
+      updateStats();
+      updateCombatDisplay();
+      document.getElementById('combat-log').textContent = msg;
+
+      if (combatState.enemyStamina <= 0) endCombat(true);
+      else if (player.stamina <= 0) gameOver(`${combatState.enemyName} legyőzött a ${currentPara}. szakasznál.`);
+    }
