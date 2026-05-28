@@ -309,3 +309,24 @@ function gotoParaParagraph(n) {
       document.getElementById('eat-note').textContent = `Élelem: ${player.food}/10`;
       document.getElementById('eat-btn').disabled = player.food <= 0;
     }
+
+       function drinkPotion() {
+      if (player.potionCharges <= 0) { showToast('Az ital kiürült!', 'bad'); return; }
+      if (inCombat) { showToast('Harcban nem tudod elővenni az italt!', 'bad'); return; }
+      player.potionCharges--;
+      if (player.potion === 'skill') {
+        player.skill = player.maxSkill;
+        showToast(`⚗ Ügyesség visszaáll: ${player.skill}`, 'good');
+      } else if (player.potion === 'stamina') {
+        player.stamina = player.maxStamina;
+        showToast(`⚗ Életerő visszaáll: ${player.stamina}`, 'good');
+      } else {
+        player.maxLuck += 1;
+        player.luck = player.maxLuck;
+        showToast(`⚗ Szerencse visszaáll: ${player.luck} (+1 max)`, 'good');
+      }
+      updateStats();
+      const btn = document.getElementById('drink-potion-btn');
+      if (player.potionCharges <= 0) btn.textContent = '🧪 Ital (kiürült)';
+      else btn.textContent = `🧪 Ital (${player.potionCharges} adag)`;
+    }
