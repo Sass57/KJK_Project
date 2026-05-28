@@ -340,3 +340,18 @@ function gameWin() {
     document.getElementById('game-screen').classList.remove('active');
     document.getElementById('game-win').style.display = 'block';
 }
+
+function restartGame() {
+    document.getElementById('game-over').style.display = 'none';
+    document.getElementById('game-win').style.display = 'none';
+    document.getElementById('game-screen').classList.remove('active');
+    document.getElementById('setup-screen').classList.add('active');
+    document.getElementById('stats-bar').style.display = 'none';
+    GAME._pendingStats = null;
+    selectedPotion = null;
+    document.querySelectorAll('.potion-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('start-btn').style.display = 'none';
+    document.getElementById('setup-skill').textContent = '—';
+    document.getElementById('setup-stamina').textContent = '—';
+    document.getElementById('setup-luck').textContent = '—';
+}
