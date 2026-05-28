@@ -104,229 +104,239 @@ function gotoParaParagraph(n) {
     const pb = document.getElementById('drink-potion-btn');
     if (player.potionCharges <= 0) { pb.textContent = '🧪 Ital (kiürült)'; pb.disabled = true; }
     else { pb.textContent = `🧪 Ital (${player.potionCharges} adag)`; pb.disabled = false; }
-      if (data.b) {
+    if (data.b) {
         startCombat(data.b, data.c);
         return;
-      }
+    }
 
-      if (data.l && data.c && data.c.length >= 2) {
+    if (data.l && data.c && data.c.length >= 2) {
         luckPending = data.c;
         document.getElementById('luck-section').classList.add('active');
         document.getElementById('choices').innerHTML = '';
         return;
-      }
-
-      renderChoices(data.c || []);
     }
 
-    function renderChoices(choices) {
-      const el = document.getElementById('choices');
-      el.innerHTML = '';
+    renderChoices(data.c || []);
+}
 
-      if (!choices.length) {
+function renderChoices(choices) {
+    const el = document.getElementById('choices');
+    el.innerHTML = '';
+
+    if (!choices.length) {
         const text = GAME.DATA[String(currentPara)]?.t || '';
         const lower = text.toLowerCase();
         const isDeath = lower.includes('meghaltál') || lower.includes('kalandod véget ért') ||
-          lower.includes('elpusztul') || lower.includes('nem éled túl') ||
-          lower.includes('élete véget ért') || lower.includes('végzetes');
+            lower.includes('elpusztul') || lower.includes('nem éled túl') ||
+            lower.includes('élete véget ért') || lower.includes('végzetes');
         if (isDeath) { setTimeout(gameOver, 1400); return; }
         return;
-      }
+    }
 
-      choices.forEach(c => {
+    choices.forEach(c => {
         const btn = document.createElement('button');
         btn.className = 'choice-btn';
         btn.innerHTML = `<span>» ${c.text}</span><span class="choice-arrow">↩ ${c.target}</span>`;
         btn.onclick = () => gotoParaParagraph(c.target);
         el.appendChild(btn);
-      });
-    }
-        function manualJump() {
-      const val = parseInt(document.getElementById('jump-input')?.value);
-      if (val >= 1 && val <= 400) gotoParaParagraph(val);
-      else showToast('1–400 közötti számot adj meg!', 'bad');
-    }
+    });
+}
+function manualJump() {
+    const val = parseInt(document.getElementById('jump-input')?.value);
+    if (val >= 1 && val <= 400) gotoParaParagraph(val);
+    else showToast('1–400 közötti számot adj meg!', 'bad');
+}
 
-    function startCombat(enemy, afterChoices) {
-      inCombat = true;
-      combatState = {
+function startCombat(enemy, afterChoices) {
+    inCombat = true;
+    combatState = {
         enemySkill: enemy.skill,
         enemyStamina: enemy.stamina,
         enemyName: enemy.name || 'Szörny',
         afterChoices: afterChoices || [],
         luckAvailable: false,
         lastResult: null
-      };
+    };
 
-      document.getElementById('combat-section').classList.add('active');
-      document.getElementById('enemy-name').textContent = combatState.enemyName;
-      document.getElementById('fight-btn').disabled = false;
-      document.getElementById('flee-btn').disabled = false;
-      updateCombatDisplay();
-      document.getElementById('combat-log').textContent = `${enemy.name} (Ü:${enemy.skill} É:${enemy.stamina}) rád támad!`;
-      document.getElementById('luck-fight-btn').style.display = 'none';
-      document.getElementById('choices').innerHTML = '';
-    }
+    document.getElementById('combat-section').classList.add('active');
+    document.getElementById('enemy-name').textContent = combatState.enemyName;
+    document.getElementById('fight-btn').disabled = false;
+    document.getElementById('flee-btn').disabled = false;
+    updateCombatDisplay();
+    document.getElementById('combat-log').textContent = `${enemy.name} (Ü:${enemy.skill} É:${enemy.stamina}) rád támad!`;
+    document.getElementById('luck-fight-btn').style.display = 'none';
+    document.getElementById('choices').innerHTML = '';
+}
 
-    function updateCombatDisplay() {
-      document.getElementById('p-hp').textContent = player.stamina;
-      document.getElementById('p-sk').textContent = `Ü: ${player.skill}`;
-      document.getElementById('e-hp').textContent = combatState.enemyStamina;
-      document.getElementById('e-sk').textContent = `Ü: ${combatState.enemySkill}`;
-    }
+function updateCombatDisplay() {
+    document.getElementById('p-hp').textContent = player.stamina;
+    document.getElementById('p-sk').textContent = `Ü: ${player.skill}`;
+    document.getElementById('e-hp').textContent = combatState.enemyStamina;
+    document.getElementById('e-sk').textContent = `Ü: ${combatState.enemySkill}`;
+}
 
-        function fightRound() {
-      if (!inCombat) return;
-      const playerRoll = roll2d6();
-      const enemyRoll = roll2d6();
-      const playerAttack = playerRoll + player.skill;
-      const enemyAttack = enemyRoll + combatState.enemySkill;
+function fightRound() {
+    if (!inCombat) return;
+    const playerRoll = roll2d6();
+    const enemyRoll = roll2d6();
+    const playerAttack = playerRoll + player.skill;
+    const enemyAttack = enemyRoll + combatState.enemySkill;
 
-      let log = `Te: ${playerRoll}+${player.skill}=${playerAttack} | ${combatState.enemyName}: ${enemyRoll}+${combatState.enemySkill}=${enemyAttack}. `;
-      combatState.luckAvailable = false;
+    let log = `Te: ${playerRoll}+${player.skill}=${playerAttack} | ${combatState.enemyName}: ${enemyRoll}+${combatState.enemySkill}=${enemyAttack}. `;
+    combatState.luckAvailable = false;
 
-      if (playerAttack > enemyAttack) {
+    if (playerAttack > enemyAttack) {
         combatState.enemyStamina -= 2;
         log += `✓ Sebzetted! (${combatState.enemyStamina} ÉP maradt)`;
         combatState.lastResult = 'hit';
         combatState.luckAvailable = true;
         document.getElementById('luck-fight-btn').style.display = 'inline-flex';
-      } else if (enemyAttack > playerAttack) {
+    } else if (enemyAttack > playerAttack) {
         player.stamina -= 2;
         log += `✗ Megsebesültél! (${player.stamina} ÉP maradt)`;
         combatState.lastResult = 'hit_player';
         combatState.luckAvailable = true;
         document.getElementById('luck-fight-btn').style.display = 'inline-flex';
         updateStats();
-      } else {
+    } else {
         log += `⬡ Holtpont! Következő forduló.`;
         document.getElementById('luck-fight-btn').style.display = 'none';
-      }
+    }
 
-      document.getElementById('combat-log').textContent = log;
-      updateCombatDisplay();
+    document.getElementById('combat-log').textContent = log;
+    updateCombatDisplay();
 
-      if (combatState.enemyStamina <= 0) {
+    if (combatState.enemyStamina <= 0) {
         endCombat(true);
-      } else if (player.stamina <= 0) {
+    } else if (player.stamina <= 0) {
         gameOver(`${combatState.enemyName} legyőzött a ${currentPara}. szakasznál. Kalandod véget ért.`);
-      }
     }
+}
 
-    function luckInCombat() {
-      if (!combatState.luckAvailable) return;
-      combatState.luckAvailable = false;
-      document.getElementById('luck-fight-btn').style.display = 'none';
+function luckInCombat() {
+    if (!combatState.luckAvailable) return;
+    combatState.luckAvailable = false;
+    document.getElementById('luck-fight-btn').style.display = 'none';
 
-      const roll = roll2d6();
-      const lucky = roll <= player.luck;
-      player.luck = Math.max(0, player.luck - 1);
+    const roll = roll2d6();
+    const lucky = roll <= player.luck;
+    player.luck = Math.max(0, player.luck - 1);
 
-      let msg = '';
-      if (combatState.lastResult === 'hit') {
+    let msg = '';
+    if (combatState.lastResult === 'hit') {
         if (lucky) {
-          combatState.enemyStamina -= 2;
-          msg = `✦ Szerencsés! Plusz 2 seb. (${combatState.enemyStamina} ÉP)`;
+            combatState.enemyStamina -= 2;
+            msg = `✦ Szerencsés! Plusz 2 seb. (${combatState.enemyStamina} ÉP)`;
         } else {
-          combatState.enemyStamina += 1;
-          msg = `✦ Balszerencsés! 1 seb visszaáll. (${combatState.enemyStamina} ÉP)`;
+            combatState.enemyStamina += 1;
+            msg = `✦ Balszerencsés! 1 seb visszaáll. (${combatState.enemyStamina} ÉP)`;
         }
-      } else {
+    } else {
         if (lucky) {
-          player.stamina += 1;
-          msg = `✦ Szerencsés! 1 seb csökken. (${player.stamina} ÉP)`;
+            player.stamina += 1;
+            msg = `✦ Szerencsés! 1 seb csökken. (${player.stamina} ÉP)`;
         } else {
-          player.stamina -= 1;
-          msg = `✦ Balszerencsés! +1 seb. (${player.stamina} ÉP)`;
+            player.stamina -= 1;
+            msg = `✦ Balszerencsés! +1 seb. (${player.stamina} ÉP)`;
         }
-      }
-
-      showToast(msg, lucky ? 'good' : 'bad');
-      updateStats();
-      updateCombatDisplay();
-      document.getElementById('combat-log').textContent = msg;
-
-      if (combatState.enemyStamina <= 0) endCombat(true);
-      else if (player.stamina <= 0) gameOver(`${combatState.enemyName} legyőzött a ${currentPara}. szakasznál.`);
-    }
-       function fleeCombat() {
-      player.stamina -= 2;
-      updateStats();
-      showToast('Menekülés közben megsebesültél! (-2 ÉP)', 'bad');
-      endCombat(false);
     }
 
-    function endCombat(won) {
-      inCombat = false;
-      document.getElementById('combat-section').classList.remove('active');
-      document.getElementById('fight-btn').disabled = true;
-      document.getElementById('flee-btn').disabled = true;
+    showToast(msg, lucky ? 'good' : 'bad');
+    updateStats();
+    updateCombatDisplay();
+    document.getElementById('combat-log').textContent = msg;
 
-      if (won) {
+    if (combatState.enemyStamina <= 0) endCombat(true);
+    else if (player.stamina <= 0) gameOver(`${combatState.enemyName} legyőzött a ${currentPara}. szakasznál.`);
+}
+function fleeCombat() {
+    player.stamina -= 2;
+    updateStats();
+    showToast('Menekülés közben megsebesültél! (-2 ÉP)', 'bad');
+    endCombat(false);
+}
+
+function endCombat(won) {
+    inCombat = false;
+    document.getElementById('combat-section').classList.remove('active');
+    document.getElementById('fight-btn').disabled = true;
+    document.getElementById('flee-btn').disabled = true;
+
+    if (won) {
         showToast(`Legyőzted: ${combatState.enemyName}! ⚔`, 'good');
         document.getElementById('combat-log').textContent = `${combatState.enemyName} elesett.`;
         renderChoices(combatState.afterChoices || []);
-      } else {
+    } else {
         renderChoices(combatState.afterChoices || []);
-      }
     }
+}
 
-    function testLuck() {
-      const roll = roll2d6();
-      const lucky = roll <= player.luck;
-      player.luck = Math.max(0, player.luck - 1);
-      updateStats();
+function testLuck() {
+    const roll = roll2d6();
+    const lucky = roll <= player.luck;
+    player.luck = Math.max(0, player.luck - 1);
+    updateStats();
 
-      document.getElementById('luck-section').classList.remove('active');
+    document.getElementById('luck-section').classList.remove('active');
 
-      if (luckPending) {
+    if (luckPending) {
         const choices = luckPending;
         luckPending = null;
         const luckyChoice = choices.find(c => c.text.toLowerCase().includes('szerencsés') && !c.text.toLowerCase().includes('bal'));
         const badChoice = choices.find(c => c.text.toLowerCase().includes('balszerencsés') || c.text.toLowerCase().includes('nincs szerencséd'));
 
         if (lucky && luckyChoice) {
-          showToast(`✦ Szerencsés vagy! (${roll} ≤ ${player.luck + 1})`, 'good');
-          setTimeout(() => gotoParaParagraph(luckyChoice.target), 800);
+            showToast(`✦ Szerencsés vagy! (${roll} ≤ ${player.luck + 1})`, 'good');
+            setTimeout(() => gotoParaParagraph(luckyChoice.target), 800);
         } else if (!lucky && badChoice) {
-          showToast(`✦ Balszerencse! (${roll} > ${player.luck + 1})`, 'bad');
-          setTimeout(() => gotoParaParagraph(badChoice.target), 800);
+            showToast(`✦ Balszerencse! (${roll} > ${player.luck + 1})`, 'bad');
+            setTimeout(() => gotoParaParagraph(badChoice.target), 800);
         } else {
-          showToast(lucky ? `✦ Szerencsés! (${roll})` : `✦ Balszerencse! (${roll})`, lucky ? 'good' : 'bad');
-          const target = lucky ? choices[0].target : (choices[1] || choices[0]).target;
-          setTimeout(() => gotoParaParagraph(target), 800);
+            showToast(lucky ? `✦ Szerencsés! (${roll})` : `✦ Balszerencse! (${roll})`, lucky ? 'good' : 'bad');
+            const target = lucky ? choices[0].target : (choices[1] || choices[0]).target;
+            setTimeout(() => gotoParaParagraph(target), 800);
         }
-      }
     }
+}
 
-    function eatFood() {
-      if (player.food <= 0) { showToast('Nincs élelem!', 'bad'); return; }
-      if (player.stamina >= player.maxStamina) { showToast('Teljes az életerőd!'); return; }
-      player.food--;
-      player.stamina = Math.min(player.maxStamina, player.stamina + 4);
-      updateStats();
-      showToast(`Evett. +4 ÉP → ${player.stamina}`, 'good');
-      document.getElementById('eat-note').textContent = `Élelem: ${player.food}/10`;
-      document.getElementById('eat-btn').disabled = player.food <= 0;
-    }
+function eatFood() {
+    if (player.food <= 0) { showToast('Nincs élelem!', 'bad'); return; }
+    if (player.stamina >= player.maxStamina) { showToast('Teljes az életerőd!'); return; }
+    player.food--;
+    player.stamina = Math.min(player.maxStamina, player.stamina + 4);
+    updateStats();
+    showToast(`Evett. +4 ÉP → ${player.stamina}`, 'good');
+    document.getElementById('eat-note').textContent = `Élelem: ${player.food}/10`;
+    document.getElementById('eat-btn').disabled = player.food <= 0;
+}
 
-       function drinkPotion() {
-      if (player.potionCharges <= 0) { showToast('Az ital kiürült!', 'bad'); return; }
-      if (inCombat) { showToast('Harcban nem tudod elővenni az italt!', 'bad'); return; }
-      player.potionCharges--;
-      if (player.potion === 'skill') {
+function drinkPotion() {
+    if (player.potionCharges <= 0) { showToast('Az ital kiürült!', 'bad'); return; }
+    if (inCombat) { showToast('Harcban nem tudod elővenni az italt!', 'bad'); return; }
+    player.potionCharges--;
+    if (player.potion === 'skill') {
         player.skill = player.maxSkill;
         showToast(`⚗ Ügyesség visszaáll: ${player.skill}`, 'good');
-      } else if (player.potion === 'stamina') {
+    } else if (player.potion === 'stamina') {
         player.stamina = player.maxStamina;
         showToast(`⚗ Életerő visszaáll: ${player.stamina}`, 'good');
-      } else {
+    } else {
         player.maxLuck += 1;
         player.luck = player.maxLuck;
         showToast(`⚗ Szerencse visszaáll: ${player.luck} (+1 max)`, 'good');
-      }
-      updateStats();
-      const btn = document.getElementById('drink-potion-btn');
-      if (player.potionCharges <= 0) btn.textContent = '🧪 Ital (kiürült)';
-      else btn.textContent = `🧪 Ital (${player.potionCharges} adag)`;
     }
+    updateStats();
+    const btn = document.getElementById('drink-potion-btn');
+    if (player.potionCharges <= 0) btn.textContent = '🧪 Ital (kiürült)';
+    else btn.textContent = `🧪 Ital (${player.potionCharges} adag)`;
+}
+function gameOver(msg) {
+    document.getElementById('game-screen').classList.remove('active');
+    document.getElementById('game-over').style.display = 'block';
+    document.getElementById('game-over-msg').textContent = msg || `Életerőd elfogyott a ${currentPara}. szakasznál. A Tűzhegy nyelte el lelkedet...`;
+}
+
+function gameWin() {
+    document.getElementById('game-screen').classList.remove('active');
+    document.getElementById('game-win').style.display = 'block';
+}
